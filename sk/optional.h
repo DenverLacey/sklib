@@ -121,19 +121,16 @@ namespace sk {
     template<typename T>
     struct Optional<T&> {
         // === Data ===
-        // bool _has_value;
         T* _value;
 
 
         // === Constructors / Assignments ===
         Optional(T& value) noexcept :
-            // _has_value(true),
             _value(&value)
         {
         }
 
         Optional(internal::TNone) noexcept :
-            // _has_value(false)
             _value(nullptr)
         {
         }
@@ -142,25 +139,21 @@ namespace sk {
         Optional<T&>& operator=(Optional<T&>&&) noexcept = default;
 
         Optional<T&>& operator=(internal::TNone) noexcept {
-            // this->_has_value = false;
             this->_value = nullptr;
             return *this;
         }
 
         Optional<T&>& operator=(const T& value) noexcept {
-            // this->_has_value = true;
             *this->_value = value;
             return *this;
         }
 
         // === Associated Functions ===
         bool is_some() const noexcept {
-            // return this->_has_value;
             return this->_value != nullptr;
         }
 
         bool is_none() const noexcept {
-            // return !this->_has_value;
             return this->_value == nullptr;
         }
 

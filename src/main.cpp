@@ -8,6 +8,7 @@
 #include "sk/mem/arena-allocator.h"
 #include "sk/ptr/nonnull.h"
 #include "sk/ptr/owned.h"
+#include "sk/gfx/canvas.h"
 
 #define FILE __FILE__
 #define LINE __LINE__
@@ -186,6 +187,37 @@ void owned_example() {
     sk::println("last = {}", last);
 }
 
+void canvas_example() {
+    auto canvas = sk::Canvas::make(sk::c_allocator, 15, 15);
+    defer { canvas.destroy(sk::c_allocator); };
+
+    {
+        auto start = canvas.pixel_index(3, 3);
+        auto end = canvas.pixel_index(5, 5);
+
+        for (auto i = start; i <= end; i++) {
+            auto& pixel = canvas.pixels[i];
+            pixel = 15;
+        }
+
+        canvas.pixels[start] = 51;
+        canvas.pixels[end - 1] = 51;
+    }
+
+    auto osc = canvas.subcanvas(3, 3, 3, 3);
+    if (osc.is_none()) {
+        sk::println("Failed to make subcanvas.");
+        return;
+    }
+
+    auto sc = osc.unwrap();
+
+    sk::println("sc.width  = {}", sc.width);
+    sk::println("sc.height = {}", sc.height);
+    sk::println("sc.stride = {}", sc.stride);
+    sk::println("sc.pixels = {}", sc.pixels);
+}
+
 int main() {
     string_example();
     std::cout << std::endl;
@@ -215,6 +247,9 @@ int main() {
     std::cout << std::endl;
 
     owned_example();
+    std::cout << std::endl;
+
+    canvas_example();
     std::cout << std::endl;
 
     return 0;

@@ -126,25 +126,25 @@ namespace sk {
     template<typename T>
     struct Owned<List<T>> : public IOwned<List<T>> {
         // === Data ===
-        Allocator& _ator;
+        Allocator& allocator;
 
         // === Constructors / Assignments ===
-        Owned(Allocator& allocator) noexcept : IOwned<List<T>>(), _ator(allocator) {}
+        Owned(Allocator& allocator) noexcept : IOwned<List<T>>(), allocator(allocator) {}
         Owned(const Owned<List<T>>&) noexcept = default;
         Owned(Owned<List<T>>&&) noexcept = default;
 
         // === Destructor ===
         ~Owned() {
-            this->destroy(_ator);
+            this->destroy(allocator);
         }
 
         // === Associated Functions ===
         List<T> clone() const noexcept {
-            return this->as_ref().clone(_ator);
+            return this->as_ref().clone(allocator);
         }
 
         bool append(const T& item) noexcept {
-            return this->as_ref().append(_ator, item);
+            return this->as_ref().append(allocator, item);
         }
     };
 

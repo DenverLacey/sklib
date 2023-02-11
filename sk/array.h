@@ -61,6 +61,12 @@ template<typename T>
             return this->items[this->len - 1];
         }
 
+        Array<T> slice(size_t idx, size_t len) const noexcept {
+            assert(idx + len < this->len);
+            T* ptr = &this->items[idx];
+            return { len, ptr };
+        }
+
         // === Iterator Stuff ===
         T* begin() noexcept {
             return this->items;
