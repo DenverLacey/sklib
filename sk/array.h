@@ -48,23 +48,21 @@ template<typename T>
         }
 
         Optional<T&> first() const noexcept {
-            if (this->len == 0) {
-                return None;
-            }
-            return this->items[0];
+            return this->at(0);
         }
 
         Optional<T&> last() const noexcept {
-            if (this->len == 0) {
-                return None;
-            }
-            return this->items[this->len - 1];
+            return this->at(this->len - 1);
         }
 
         Array<T> slice(size_t idx, size_t len) const noexcept {
-            assert(idx + len < this->len);
+            assert(idx + len <= this->len);
             T* ptr = &this->items[idx];
             return { len, ptr };
+        }
+
+        Array<T> tail() const noexcept {
+            return this->slice(1, this->len - 1);
         }
 
         // === Iterator Stuff ===

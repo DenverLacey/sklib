@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fmt.h"
+#include "internal.h"
 
 #include <ostream>
 #include <type_traits>
@@ -12,8 +13,6 @@ namespace sk {
                 return s << "None";
             }
         };
-
-        void panic_if_none(bool has_value, const char *message) noexcept;
     }
 
     inline constexpr internal::TNone None = {};
@@ -65,12 +64,12 @@ namespace sk {
         }
 
         T& unwrap() noexcept {
-            internal::panic_if_none(this->_has_value, "Unwrap of None value attempted.");
+            internal::ensure(this->_has_value, "Unwrap of None value attempted.");
             return this->_value;
         }
 
         T& expect(const char* message) noexcept {
-            internal::panic_if_none(this->_has_value, message);
+            internal::ensure(this->_has_value, message);
             return this->_value;
         }
 
@@ -158,12 +157,12 @@ namespace sk {
         }
 
         T& unwrap() noexcept {
-            internal::panic_if_none(this->is_some(), "Unwrap of None value attempted.");
+            internal::ensure(this->is_some(), "Unwrap of None value attempted.");
             return *this->_value;
         }
 
         T& expect(const char* message) noexcept {
-            internal::panic_if_none(this->is_some(), message);
+            internal::ensure(this->is_some(), message);
             return *this->_value;
         }
 

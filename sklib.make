@@ -75,6 +75,7 @@ GENERATED += $(OBJDIR)/c-allocator.o
 GENERATED += $(OBJDIR)/canvas.o
 GENERATED += $(OBJDIR)/fmt.o
 GENERATED += $(OBJDIR)/formatter.o
+GENERATED += $(OBJDIR)/internal.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/optional.o
 GENERATED += $(OBJDIR)/string.o
@@ -84,6 +85,7 @@ OBJECTS += $(OBJDIR)/c-allocator.o
 OBJECTS += $(OBJDIR)/canvas.o
 OBJECTS += $(OBJDIR)/fmt.o
 OBJECTS += $(OBJDIR)/formatter.o
+OBJECTS += $(OBJDIR)/internal.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/optional.o
 OBJECTS += $(OBJDIR)/string.o
@@ -167,6 +169,9 @@ $(OBJDIR)/arena-allocator.o: sk/mem/src/arena-allocator.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/c-allocator.o: sk/mem/src/c-allocator.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/internal.o: sk/src/internal.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/optional.o: sk/src/optional.cpp

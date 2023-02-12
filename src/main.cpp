@@ -1,6 +1,7 @@
 #include "sk/fmt.h"
 #include "sk/string.h"
 #include "sk/optional.h"
+#include "sk/result.h"
 #include "sk/array.h"
 #include "sk/defer.h"
 #include "sk/list.h"
@@ -79,6 +80,30 @@ void optional_reference_example() {
     }
 }
 
+void result_example() {
+    auto ok = sk::Ok<const char*>(69);
+    auto err = sk::Err<void>((const char*)"This is an error.");
+
+    if (ok.is_ok()) {
+        sk::println("ok successfully detected as is_ok()");
+    } else {
+        sk::println("ok failed to be detected as is_ok()");
+    }
+
+    if (err.is_err()) {
+        sk::println("err successfully detected as is_err()");
+    } else {
+        sk::println("err failed to be detected as is_err()");
+    }
+
+    sk::println("ok  = {}", ok);
+    sk::println("err = {}", err);
+}
+
+void result_reference_example() {
+
+}
+
 void array_example() {
     int ns[] = { 1, 2, 3, 4, 5 };
     auto arr = sk::Array{ sizeof(ns) / sizeof(ns[0]), ns };
@@ -86,11 +111,13 @@ void array_example() {
     auto _3rd = arr[2];
     auto first = arr.first();
     auto last = arr.last();
+    auto tail = arr.tail();
 
     sk::println("arr = {}", arr);
     sk::println("_3rd = {}", _3rd);
     sk::println("first = {}", first);
     sk::println("last = {}", last);
+    sk::println("tail = {}", tail);
 }
 
 void defer_example() {
@@ -229,6 +256,9 @@ int main() {
     std::cout << std::endl;
 
     optional_reference_example();
+    std::cout << std::endl;
+
+    result_example();
     std::cout << std::endl;
 
     array_example();

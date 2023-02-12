@@ -43,17 +43,11 @@ namespace sk {
         }
 
         Optional<T&> first() const noexcept {
-            if (this->len == 0) {
-                return None;
-            }
-            return this->items[0];
+            return this->at(0);
         }
 
         Optional<T&> last() const noexcept {
-            if (this->len == 0) {
-                return None;
-            }
-            return this->items[this->len - 1];
+            return this->at(this->len - 1);
         }
 
         void destroy(Allocator& ator) noexcept {
