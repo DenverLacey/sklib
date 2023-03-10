@@ -40,9 +40,17 @@ namespace sk {
     template<typename T>
     struct Formatter<Owned<T>> {
         static void format(const Owned<T>& value, std::string_view fmt, Writer& writer) {
-            writer.write("Owned(");
-            writer.write(value.as_ref(), fmt);
-            writer.write(')');
+            auto format = Format::from(fmt);
+
+            if (format.alternate) {
+                writer.write_string("Owned(");
+            }
+
+            writer.write_value(value.as_ref(), fmt);
+            
+            if (format.alternate) {
+                writer.write_char(')');
+            }
         }
     };
 }

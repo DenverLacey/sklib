@@ -97,8 +97,25 @@ namespace sk {
     }
 
     Optional<Array<uint8_t>> ArenaAllocator::on_resize(Array<uint8_t> buf, uint32_t buf_align, size_t new_size) {
-        // @TODO
-        return None;
+        auto block = this->_blocks;
+        
+        if (block && new_size <= this->block_size) {
+            auto memory_start = (uintptr_t)block->memory;
+            auto free_memory_start = memory_start + block->allocated;
+            auto last_allocation = free_memory_start - buf.len;
+            auto this_allocation = (uintptr_t)buf.items;
+            if (last_allocation == this_allocation) {
+                auto size_difference = new_size - buf.len;
+                block->allocated += size_difference;
+                buf.len = new_size;
+                return buf;
+            }
+        }
+
+        auto new_allocation = this->on_alloc(new_size, buf_align);
+        memcpy(new_allocation.items, buf.items, buf.len);
+
+        return new_allocation;
     }
 
     void ArenaAllocator::on_free(Array<uint8_t> buf, uint32_t buf_align) {

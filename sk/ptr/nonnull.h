@@ -112,7 +112,7 @@ namespace sk {
     struct Formatter<NonNull<T>> {
         static void format(const NonNull<T>& p, std::string_view fmt, Writer& writer) {
             auto format = Format::from(fmt);
-            writer.write(p.as_ptr(), format);
+            writer.write_ptr(p.as_ptr(), format);
         }
     };
 }

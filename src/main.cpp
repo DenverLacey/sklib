@@ -82,7 +82,7 @@ void optional_reference_example() {
 
 void result_example() {
     auto ok = sk::Ok<const char*>(69);
-    auto err = sk::Err<void>((const char*)"This is an error.");
+    auto err = sk::Err<void>((const char*)"This is an error");
 
     if (ok.is_ok()) {
         sk::println("ok successfully detected as is_ok()");
@@ -120,16 +120,6 @@ void array_example() {
     sk::println("tail = {}", tail);
 }
 
-void defer_example() {
-    defer { 
-        sk::println("First Deferred");
-    };
-
-    defer { 
-        sk::println("Second Deferred");
-    };
-}
-
 void list_example() {
     sk::List<int> list;
     defer { 
@@ -149,6 +139,38 @@ void list_example() {
     sk::println("_2nd = {}", _2nd);
     sk::println("first = {}", first);
     sk::println("last = {}", last);
+}
+
+int sum_array(sk::Array<int> ns) {
+    int total = 0;
+    for (int n : ns) {
+        total += n;
+    }
+    return total;
+}
+
+void sum_example() {
+    auto list = sk::OwnedList<int>{ sk::c_allocator };
+
+    list.append(1);
+    list.append(2);
+    list.append(3);
+    list.append(4);
+    list.append(5);
+
+    int sum = sum_array(list);
+    sk::println("list = {}", list);
+    sk::println("sum  = {}", sum);
+}
+
+void defer_example() {
+    defer { 
+        sk::println("First Deferred");
+    };
+
+    defer { 
+        sk::println("Second Deferred");
+    };
 }
 
 void nonnull_example() {
@@ -175,26 +197,56 @@ void nonnull_example() {
     }
 }
 
-void arena_allocator_example() {
-    auto ator = sk::ArenaAllocator{ &sk::c_allocator, 32 };
-    defer { ator.destroy(); };
+void arena_allocator_example() {    
+    {
+        auto ator = sk::ArenaAllocator{ &sk::c_allocator, 32 };
+        defer { ator.destroy(); };
 
-    auto ns = ator.alloc<int>(8);
-    std::fill(ns.begin(), ns.end(), 66);
+        auto ns = ator.alloc<int>(8);
+        std::fill(ns.begin(), ns.end(), 66);
 
-    auto fs = ator.alloc<float>(5);
-    std::fill(fs.begin(), fs.end(), 1.23);
+        auto fs = ator.alloc<float>(5);
+        std::fill(fs.begin(), fs.end(), 1.23);
 
-    auto cs = ator.alloc<char>(12);
-    std::fill(cs.begin(), cs.end(), 'X');
+        auto cs = ator.alloc<char>(12);
+        std::fill(cs.begin(), cs.end(), 'X');
 
-    auto sbs = ator.alloc<sk::StringBuilder>(3);
-    std::fill(sbs.begin(), sbs.end(), sk::StringBuilder{});
+        auto sbs = ator.alloc<sk::StringBuilder>(3);
+        std::fill(sbs.begin(), sbs.end(), sk::StringBuilder{});
 
-    sk::println("ns  = {}", ns);
-    sk::println("fs  = {}", fs);
-    sk::println("cs  = {}", cs);
-    sk::println("sbs = {}", sbs);
+        sk::println("ns  = {}", ns);
+        sk::println("fs  = {}", fs);
+        sk::println("cs  = {}", cs);
+        sk::println("sbs = {}", sbs);
+    }
+
+    {
+        auto arena = sk::ArenaAllocator{ &sk::c_allocator, 16 };
+        defer { arena.destroy(); };
+
+        sk::Array<int> ints = { 0, nullptr };
+
+        ints = arena.resize(ints, 3).unwrap_or({ 0, nullptr });
+        for (int i = 0; i < ints.len; i++) {
+            ints[i] = i + 1;
+        }
+
+        sk::println("{} at {}", ints, ints.items);
+
+        ints = arena.resize(ints, 4).unwrap_or({ 0, nullptr });
+        for (int i = 0; i < ints.len; i++) {
+            ints[i] = i + 1;
+        }
+
+        sk::println("{} at {}", ints, ints.items);
+
+        ints = arena.resize(ints, 10).unwrap_or({ 0, nullptr });
+        for (int i = 0; i < ints.len; i++) {
+            ints[i] = i + 1;
+        }
+
+        sk::println("{} at {}", ints, ints.items);
+    }
 }
 
 void owned_example() {
@@ -264,10 +316,13 @@ int main() {
     array_example();
     std::cout << std::endl;
 
-    defer_example();
+    list_example();
     std::cout << std::endl;
 
-    list_example();
+    sum_example();
+    std::cout << std::endl;
+
+    defer_example();
     std::cout << std::endl;
 
     nonnull_example();

@@ -83,6 +83,11 @@ namespace sk {
         static void format(const std::string& obj, std::string_view fmt, Writer& writer);
     };
 
+    template<>
+    struct Formatter<void*> {
+        static void format(const void*& obj, std::string_view fmt, Writer& writer);
+    };
+
     struct Format {
         enum class Align : char {
             Omitted = 0,

@@ -7,6 +7,7 @@
 #include "mem/allocator.h"
 #include "ptr/owned.h"
 #include "fmt.h"
+#include "array.h"
 
 namespace sk {
     template<typename T>
@@ -20,6 +21,11 @@ namespace sk {
         List() noexcept : capacity(0), len(0), items(nullptr) {}
         List(const List<T>&) noexcept = default;
         List(List<T>&&) noexcept = default;
+
+        // === Conversions ===
+        operator Array<T>() const noexcept {
+            return { this->len, this->items };
+        }
 
         // === Associated Functions ===
         size_t size() const noexcept {
@@ -48,6 +54,12 @@ namespace sk {
 
         Optional<T&> last() const noexcept {
             return this->at(this->len - 1);
+        }
+
+        Array<T> slice(size_t idx, size_t len) const noexcept {
+            assert(idx + len <= this->len);
+            T* ptr = &this->items[idx];
+            return { len, ptr };
         }
 
         void destroy(Allocator& ator) noexcept {
@@ -106,7 +118,7 @@ namespace sk {
     struct Formatter<List<T>> {
         static void format(const List<T>& list, std::string_view fmt, Writer& writer) {
             bool alternate = fmt == "#";
-            writer.write("[");
+            writer.write_string("[");
             for (size_t i = 0; i < list.len; i++) {
                 writer.print("{}{}", alternate ? "\n\t" : "", list[i]);
                 if (i + 1 < list.len) {

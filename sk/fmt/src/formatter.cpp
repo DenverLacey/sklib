@@ -6,57 +6,57 @@
 namespace sk {
     void Formatter<bool>::format(const bool& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_bool(obj, format);
     }
 
     void Formatter<char>::format(const char& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_char(obj, format);
     }
 
     void Formatter<short>::format(const short& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<int>::format(const int& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<long>::format(const long& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<long long>::format(const long long& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<unsigned short>::format(const unsigned short& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<unsigned int>::format(const unsigned int& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<unsigned long>::format(const unsigned long& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<unsigned long long>::format(const unsigned long long& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_int(obj, format);
     }
 
     void Formatter<double>::format(const double& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_float(obj, format);
     }
 
     void Formatter<float>::format(const float& obj, std::string_view fmt, Writer& writer) {
@@ -65,17 +65,22 @@ namespace sk {
 
     void Formatter<char*>::format(const char*& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj, format);
+        writer.write_string(obj, format);
     }
 
     void Formatter<std::string_view>::format(const std::string_view& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj.size(), obj.data(), format);
+        writer.write_string(obj.size(), obj.data(), format);
     }
 
     void Formatter<std::string>::format(const std::string& obj, std::string_view fmt, Writer& writer) {
         auto format = Format::from(fmt);
-        writer.write(obj.size(), obj.c_str(), format);
+        writer.write_string(obj.size(), obj.c_str(), format);
+    }
+
+    void Formatter<void*>::format(const void*& obj, std::string_view fmt, Writer& writer) {
+        auto format = Format::from(fmt);
+        writer.write_ptr(obj, format);
     }
 
     static bool is_align_char(char c) {

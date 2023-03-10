@@ -10,9 +10,9 @@ namespace sk {
             auto format = Format::from(fmt);
 
             if (format.alternate) {
-                writer.write("{\n");
+                writer.write_string("{\n");
             } else {
-                writer.write("{ ");
+                writer.write_string("{ ");
             }
 
             for (size_t i = 0; i < ts.size(); i++) {
@@ -20,17 +20,17 @@ namespace sk {
 
                 if (format.alternate) {
                     writer.print("\t{:#}", t);
-                    writer.write(",\n");
+                    writer.write_string(",\n");
                 } else {
                     writer.print("{}", t);
-                    if (i + 1 < ts.size()) writer.write(", ");
+                    if (i + 1 < ts.size()) writer.write_string(", ");
                 }
             }
 
             if (format.alternate) {
-                writer.write('}');
+                writer.write_char('}');
             } else {
-                writer.write(" }");
+                writer.write_string(" }");
             }
         }
     };

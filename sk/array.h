@@ -91,7 +91,7 @@ template<typename T>
     struct Formatter<Array<T>> {
         static void format(const Array<T>& arr, std::string_view fmt, Writer& writer) {
             bool alternate = fmt == "#";
-            writer.write("[");
+            writer.write_string("[");
             for (size_t i = 0; i < arr.len; i++) {
                 writer.print("{}{}", alternate ? "\n\t" : "", arr[i]);
                 if (i + 1 < arr.len) {

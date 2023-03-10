@@ -66,26 +66,26 @@ namespace sk {
         Writer(std::ostream& stream);
 
     public:
-        void write(const char* s, Format fmt = {});
-        void write(size_t n, const char* s, Format fmt = {});
+        void write_string(const char* s, Format fmt = {});
+        void write_string(size_t n, const char* s, Format fmt = {});
 
-        void write(bool b, Format fmt = {});
+        void write_bool(bool b, Format fmt = {});
 
-        void write(char c, Format fmt = {});
+        void write_char(char c, Format fmt = {});
 
-        void write(short d, Format fmt = {});
-        void write(int d, Format fmt = {});
-        void write(long d, Format fmt = {});
-        void write(long long d, Format fmt = {});
-        void write(unsigned short d, Format fmt = {});
-        void write(unsigned int d, Format fmt = {});
-        void write(unsigned long d, Format fmt = {});
-        void write(unsigned long long d, Format fmt = {});
+        void write_int(short d, Format fmt = {});
+        void write_int(int d, Format fmt = {});
+        void write_int(long d, Format fmt = {});
+        void write_int(long long d, Format fmt = {});
+        void write_int(unsigned short d, Format fmt = {});
+        void write_int(unsigned int d, Format fmt = {});
+        void write_int(unsigned long d, Format fmt = {});
+        void write_int(unsigned long long d, Format fmt = {});
 
-        void write(float f, Format fmt = {});
-        void write(double f, Format fmt = {});
+        void write_float(float f, Format fmt = {});
+        void write_float(double f, Format fmt = {});
         
-        void write(void* p, Format fmt = {});
+        void write_ptr(const void* p, Format fmt = {});
 
         void flush();
 
@@ -95,7 +95,7 @@ namespace sk {
         template<typename... Ts>
         void print(const char* fmt, const Ts&... args) {
             if constexpr (sizeof...(Ts) == 0) {
-                write(fmt);
+                write_string(fmt);
             } else {
                 auto packed = to_args(args...);
                 print(fmt, packed);
@@ -105,8 +105,8 @@ namespace sk {
         template<typename... Ts>
         void println(const char* fmt, const Ts&... args) {
             if constexpr (sizeof...(Ts) == 0) {
-                write(fmt);
-                write('\n');
+                write_string(fmt);
+                write_char('\n');
             } else {
                 auto packed = to_args(args...);
                 println(fmt, packed);
@@ -114,7 +114,7 @@ namespace sk {
         }
 
         template<typename T>
-        void write(const T& value, std::string_view fmt = "") {
+        void write_value(const T& value, std::string_view fmt = "") {
             auto arg = to_arg(value);
             arg.printer(arg.value_ptr, fmt, *this);
         }

@@ -222,7 +222,7 @@ namespace sk {
             if (opt.try_unwrap(val)) {
                 writer.print("Some({})", val);
             } else {
-                writer.write("None");
+                writer.write_string("None");
             }
         }
     };

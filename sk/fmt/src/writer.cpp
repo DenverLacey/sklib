@@ -31,7 +31,7 @@ namespace sk {
     {
     }
 
-    void Writer::write(const char* s, Format fmt) {
+    void Writer::write_string(const char* s, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -61,7 +61,7 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(size_t n, const char* s, Format fmt) {
+    void Writer::write_string(size_t n, const char* s, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -91,7 +91,7 @@ namespace sk {
         stream.flags(old_flags);
     }   
 
-    void Writer::write(bool b, Format fmt) {
+    void Writer::write_bool(bool b, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -129,7 +129,7 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(char c, Format fmt) {
+    void Writer::write_char(char c, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -164,19 +164,19 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(short d, Format fmt) {
-        write(static_cast<long long>(d), fmt);
+    void Writer::write_int(short d, Format fmt) {
+        this->write_int(static_cast<long long>(d), fmt);
     }
 
-    void Writer::write(int d, Format fmt) {
-        write(static_cast<long long>(d), fmt);
+    void Writer::write_int(int d, Format fmt) {
+        this->write_int(static_cast<long long>(d), fmt);
     }
 
-    void Writer::write(long d, Format fmt) {
-        write(static_cast<long long>(d), fmt);
+    void Writer::write_int(long d, Format fmt) {
+        this->write_int(static_cast<long long>(d), fmt);
     }
 
-    void Writer::write(long long d, Format fmt) {
+    void Writer::write_int(long long d, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -234,19 +234,19 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(unsigned short d, Format fmt) {
-        write(static_cast<unsigned long long>(d), fmt);
+    void Writer::write_int(unsigned short d, Format fmt) {
+        this->write_int(static_cast<unsigned long long>(d), fmt);
     }
 
-    void Writer::write(unsigned int d, Format fmt) {
-        write(static_cast<unsigned long long>(d), fmt);
+    void Writer::write_int(unsigned int d, Format fmt) {
+        this->write_int(static_cast<unsigned long long>(d), fmt);
     }
 
-    void Writer::write(unsigned long d, Format fmt) {
-        write(static_cast<unsigned long long>(d), fmt);
+    void Writer::write_int(unsigned long d, Format fmt) {
+        this->write_int(static_cast<unsigned long long>(d), fmt);
     }
 
-    void Writer::write(unsigned long long d, Format fmt) {
+    void Writer::write_int(unsigned long long d, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -304,11 +304,11 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(float f, Format fmt) {
-        write(static_cast<double>(f), fmt);
+    void Writer::write_float(float f, Format fmt) {
+        this->write_float(static_cast<double>(f), fmt);
     }
 
-    void Writer::write(double f, Format fmt) {
+    void Writer::write_float(double f, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -366,7 +366,7 @@ namespace sk {
         stream.flags(old_flags);
     }
 
-    void Writer::write(void* p, Format fmt) {
+    void Writer::write_ptr(const void* p, Format fmt) {
         auto old_flags = stream.flags();
         stream.clear();
 
@@ -399,7 +399,7 @@ namespace sk {
 
     void Writer::println(const char* fmt, const Args& args) {
         print(fmt, args);
-        write('\n');
+        write_char('\n');
     }
 
     void Writer::print(const char* fmt, const Args& args) {
@@ -408,7 +408,7 @@ namespace sk {
         size_t current_arg = 0;
         while (s[s_len] != '\0') {
             if (s[s_len] == '{' && s[s_len + 1] != '{') {
-                write(s_len, s);
+                write_string(s_len, s);
 
                 size_t i = 1;
 
@@ -441,13 +441,13 @@ namespace sk {
                 s_len = 0;
             } else if (s[s_len] == '{') {
                 s_len++;
-                write(s_len, s);
+                write_string(s_len, s);
 
                 s = &s[s_len + 1];
                 s_len = 0;
             } else if (s[s_len] == '}' && s[s_len + 1] == '}') {
                 s_len++;
-                write(s_len, s);
+                write_string(s_len, s);
 
                 s = &s[s_len + 1];
                 s_len = 0;
@@ -459,7 +459,7 @@ namespace sk {
         }
 
         if (s_len != 0) {
-            write(s_len, s);
+            write_string(s_len, s);
         }
     }
 }

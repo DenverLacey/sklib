@@ -171,7 +171,7 @@ namespace sk {
 
 void sk::Formatter<sk::String>::format(const sk::String& s, std::string_view fmt, sk::Writer& writer) {
     auto format = Format::from(fmt);
-    writer.write(s.len, s.chars, format);
+    writer.write_string(s.len, s.chars, format);
 }
 
 void sk::Formatter<sk::StringBuilder>::format(const sk::StringBuilder& builder, std::string_view fmt, sk::Writer& writer) {

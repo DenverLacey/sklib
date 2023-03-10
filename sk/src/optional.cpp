@@ -4,6 +4,6 @@
 
 namespace sk {
     void Formatter<internal::TNone>::format(const internal::TNone&, std::string_view, Writer& writer) {
-        writer.write("None");
+        writer.write_string("None");
     }
 }
